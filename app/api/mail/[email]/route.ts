@@ -29,8 +29,6 @@ export async function POST(request: NextRequest, { params }: { params: { email: 
     const { email: to } = await params
     body.to = to
 
-    console.log({ body, params })
-
     const validatedData = createEmailSchema.safeParse(body)
 
     if (!validatedData.success) {

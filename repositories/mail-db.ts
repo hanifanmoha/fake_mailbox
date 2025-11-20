@@ -46,20 +46,26 @@ class MailManager {
         }
     }
 
-    async getInbox(email: string, limit: number = 100, offset: number = 0): Promise<{ emails: Email[], total: number }> {
+    async getInbox(email: string, timeLimit?: Date, limit: number = 100, offset: number = 0): Promise<{ emails: Email[], total: number }> {
         await this.connect()
         if (!this.collection) {
             throw new Error("Collection is not initialized")
         }
 
+        const query: any = { to: email }
+
+        if (timeLimit) {
+            query.createdAt = { $gte: timeLimit }
+        }
+
         try {
             const emails = await this.collection
-                .find({ to: email })
+                .find(query)
                 .sort({ createdAt: -1 })
                 .skip(offset)
                 .limit(limit)
                 .toArray()
-            const total = await this.collection.countDocuments({ to: email })
+            const total = await this.collection.countDocuments(query)
             return { emails, total }
         } catch (error) {
             console.error("Failed to get inbox:", error)
@@ -90,6 +96,20 @@ class MailManager {
         }
     }
 
+    async deleteOldEmails(timeLimit: Date) {
+        // delete all emails with created at before time limit
+        await this.connect()
+        if (!this.collection) {
+            throw new Error("Collection is not initialized")
+        }
+
+        try {
+            await this.collection.deleteMany({ createdAt: { $lt: timeLimit } })
+        } catch (error) {
+            console.error("Failed to delete old emails:", error)
+            throw error
+        }
+    }
 
 }
 
