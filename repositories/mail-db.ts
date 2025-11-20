@@ -46,7 +46,7 @@ class MailManager {
         }
     }
 
-    async getInbox(email: string, timeLimit?: Date, limit: number = 100, offset: number = 0): Promise<{ emails: Email[], total: number }> {
+    async getInbox(email: string, timeLimit?: Date, limit: number = 100, offset: number = 0): Promise<{ mails: Email[], total: number }> {
         await this.connect()
         if (!this.collection) {
             throw new Error("Collection is not initialized")
@@ -59,14 +59,14 @@ class MailManager {
         }
 
         try {
-            const emails = await this.collection
+            const mails = await this.collection
                 .find(query)
                 .sort({ createdAt: -1 })
                 .skip(offset)
                 .limit(limit)
                 .toArray()
             const total = await this.collection.countDocuments(query)
-            return { emails, total }
+            return { mails, total }
         } catch (error) {
             console.error("Failed to get inbox:", error)
             throw error

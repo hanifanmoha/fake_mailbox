@@ -13,7 +13,7 @@ class MailService {
         this.mailManager = _mailManager
     }
 
-    getInbox(email: string, page: number = 1): Promise<{ emails: Email[], total: number }> {
+    async getInbox(email: string, page: number = 1): Promise<{ mails: Email[], total: number, limit: number }> {
         const limit = LIMIT_PER_PAGE
         const offset = (page - 1) * limit
 
@@ -22,15 +22,16 @@ class MailService {
         // delete old emails to maintain storage
         this.mailManager.deleteOldEmails(timeLimit)
 
-        return this.mailManager.getInbox(email, timeLimit, limit, offset)
+        const { mails, total } = await this.mailManager.getInbox(email, timeLimit, limit, offset)
+        return { mails, total, limit }
     }
 
-    sendEmail(email: CreateEmailSchema): Promise<Email> {
+    async sendEmail(email: CreateEmailSchema): Promise<Email> {
         const newEmail: Email = {
             ...email,
             createdAt: new Date()
         }
-        return this.mailManager.createEmail(newEmail)
+        return await this.mailManager.createEmail(newEmail)
     }
 
 }

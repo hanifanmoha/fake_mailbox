@@ -11,13 +11,14 @@ export async function GET(request: NextRequest, { params }: { params: { email: s
     const page = Number(searchParams.get("page")) || 1
     const { email } = await params
 
-    const { emails, total } = await mailServiceInstance.getInbox(email, Number(page))
+    const { mails, total, limit } = await mailServiceInstance.getInbox(email, Number(page))
 
     return NextResponse.json({
         message: "Hello, World!",
         data: {
-            emails,
-            total
+            mails,
+            total,
+            limit
         }
     });
 }
