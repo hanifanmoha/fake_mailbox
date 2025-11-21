@@ -73,6 +73,24 @@ class MailManager {
         }
     }
 
+    async getMail(id: string): Promise<Email> {
+        await this.connect()
+        if (!this.collection) {
+            throw new Error("Collection is not initialized")
+        }
+
+        try {
+            const mail = await this.collection.findOne({ _id: new ObjectId(id) })
+            if (!mail) {
+                throw new Error("Mail not found")
+            }
+            return mail
+        } catch (error) {
+            console.error("Failed to get mail:", error)
+            throw error
+        }
+    }
+
     async createEmail(email: Email): Promise<Email> {
         await this.connect()
         if (!this.collection) {

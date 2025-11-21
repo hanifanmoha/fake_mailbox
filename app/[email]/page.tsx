@@ -2,6 +2,7 @@
 
 import { Email } from "@/services/models/email"
 import { formatTimeString } from "@/utils/time"
+import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -56,6 +57,7 @@ export default function Inbox() {
                         <th>From</th>
                         <th>Subject</th>
                         <th>Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +66,9 @@ export default function Inbox() {
                             <td>{mail.from}</td>
                             <td>{mail.subject}</td>
                             <td>{formatTimeString(mail.createdAt)}</td>
+                            <td>
+                                <Link href={`/${email}/${mail._id}`}>View</Link>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

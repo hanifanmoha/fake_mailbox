@@ -26,6 +26,10 @@ class MailService {
         return { mails, total, limit }
     }
 
+    async getMail(id: string): Promise<Email> {
+        return await this.mailManager.getMail(id)
+    }
+
     async sendEmail(email: CreateEmailSchema): Promise<Email> {
         const newEmail: Email = {
             ...email,
