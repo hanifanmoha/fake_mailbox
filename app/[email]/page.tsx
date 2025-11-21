@@ -51,7 +51,7 @@ export default function Inbox() {
 
     return (
         <div className="py-12 max-w-6xl mx-auto">
-            {/* Back to Homepage */}
+
             <Link href="/" className="btn btn-ghost btn-sm mb-6 gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -59,7 +59,7 @@ export default function Inbox() {
                 Back to Homepage
             </Link>
 
-            {/* Header */}
+
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
                     <h1 className="text-3xl font-bold">Inbox</h1>
@@ -89,13 +89,13 @@ export default function Inbox() {
                 </button>
             </div>
 
-            {/* Loading State */}
+
             {loading && mails.length === 0 ? (
                 <div className="flex justify-center items-center h-64">
                     <span className="loading loading-spinner loading-lg"></span>
                 </div>
             ) : mails.length === 0 ? (
-                /* Empty State */
+
                 <div className="card bg-base-100 shadow-xl">
                     <div className="card-body items-center text-center py-16">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24 text-base-content/20 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,7 +106,7 @@ export default function Inbox() {
                     </div>
                 </div>
             ) : (
-                /* Email List */
+
                 <>
                     <div className="card bg-base-100 shadow-xl overflow-hidden">
                         <div className="overflow-x-auto">
@@ -150,7 +150,7 @@ export default function Inbox() {
                         </div>
                     </div>
 
-                    {/* Pagination */}
+
                     <div className="flex justify-center items-center gap-4 mt-8">
                         <button
                             disabled={page === 1 || loading}

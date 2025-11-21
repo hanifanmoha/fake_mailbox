@@ -12,10 +12,8 @@ interface PageProps {
 export default async function MailDetailPage({ params }: PageProps) {
     const { email, id } = await params
 
-    // Fetch email on the server side
     const mail = await mailServiceInstance.getMail(id)
 
-    // Convert to serializable object
     const serializedMail = {
         ...mail,
         _id: mail._id?.toString(),
@@ -24,12 +22,12 @@ export default async function MailDetailPage({ params }: PageProps) {
 
     return (
         <div className="pt-12 max-w-4xl mx-auto">
-            {/* Back button */}
+
             <Link href={`/${email}`} className="btn btn-ghost mb-6">
                 ← Back to Inbox
             </Link>
 
-            {/* Email header */}
+
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body">
                     <h1 className="card-title text-3xl mb-4">{mail.subject}</h1>
@@ -48,7 +46,7 @@ export default async function MailDetailPage({ params }: PageProps) {
 
                     <div className="divider"></div>
 
-                    {/* Email body - render HTML */}
+
                     <div
                         className="prose max-w-none"
                         dangerouslySetInnerHTML={{ __html: mail.body }}
