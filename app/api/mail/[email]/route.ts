@@ -4,7 +4,10 @@ import mailServiceInstance from '@/services/mail-service';
 import { createEmailSchema } from '@/services/schema/email';
 
 // Handle GET requests
-export async function GET(request: NextRequest, { params }: { params: { email: string } }): Promise<NextResponse<GeneralResponse>> {
+export async function GET(
+    request: NextRequest,
+    { params }: { params: Promise<{ email: string }> }
+): Promise<NextResponse<GeneralResponse>> {
 
     const { searchParams } = new URL(request.url)
 

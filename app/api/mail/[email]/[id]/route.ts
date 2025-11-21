@@ -5,7 +5,7 @@ import mailServiceInstance from '@/services/mail-service';
 // Handle GET requests
 export async function GET(
     request: NextRequest,
-    { params }: { params: { email: string, id: string } }
+    { params }: { params: Promise<{ email: string, id: string }> }
 ): Promise<NextResponse<GeneralResponse>> {
 
     const { id } = await params
