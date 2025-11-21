@@ -5,3 +5,7 @@
 @plugin "daisyui" {
   themes: halloween --default, light, dark;
 }
+
+@theme {
+  --font-family-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
