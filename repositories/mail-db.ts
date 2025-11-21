@@ -35,9 +35,6 @@ class MailManager {
             this.collection = this.db.collection(COLLECTION_NAME)
             this.isConnected = true
 
-            // create index
-            // skip for now
-
             console.log("Connected to MongoDB")
             return this.db
         } catch (error) {
@@ -47,6 +44,9 @@ class MailManager {
     }
 
     async getInbox(email: string, timeLimit?: Date, limit: number = 100, offset: number = 0): Promise<{ mails: Email[], total: number }> {
+
+        console.log(`getInbox email: ${email}, timeLimit: ${timeLimit}, limit: ${limit}, offset: ${offset}`)
+
         await this.connect()
         if (!this.collection) {
             throw new Error("Collection is not initialized")

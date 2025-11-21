@@ -22,29 +22,3 @@ export async function GET(request: NextRequest, { params }: { params: { email: s
         }
     });
 }
-
-// Handle POST requests
-export async function POST(request: NextRequest, { params }: { params: { email: string } }): Promise<NextResponse<GeneralResponse>> {
-
-    const body = await request.json();
-    const { email: to } = await params
-    body.to = to
-
-    const validatedData = createEmailSchema.safeParse(body)
-
-    if (!validatedData.success) {
-        return NextResponse.json({
-            message: "Invalid data",
-            error: validatedData.error
-        }, {
-            status: 400
-        })
-    }
-
-    const email = await mailServiceInstance.sendEmail(validatedData.data)
-
-    return NextResponse.json({
-        message: "Email sent successfully",
-        data: email
-    });
-}

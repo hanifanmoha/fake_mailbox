@@ -1,16 +1,9 @@
 'use client'
 
 import { Email } from "@/services/models/email"
+import { formatTimeString } from "@/utils/time"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-
-function Mail({ mail }: { mail: Email }) {
-    return <div className="flex flex-col border-b p-4">
-        <h3 className="font-bold">{mail.subject}</h3>
-        <p className="text-sm">From: {mail.from}</p>
-        <p className="text-sm">{new Date(mail.createdAt).toDateString()}</p>
-    </div>
-}
 
 export default function Inbox() {
 
@@ -21,8 +14,16 @@ export default function Inbox() {
     const [page, setPage] = useState(1)
     const [hasNext, setHasNext] = useState(false)
 
-    const loadMore = () => {
+    const handleNextPage = () => {
         setPage(page + 1)
+    }
+
+    const handlePreviousPage = () => {
+        setPage(page - 1)
+    }
+
+    const refresh = () => {
+        setPage(1)
     }
 
     useEffect(() => {
@@ -30,10 +31,8 @@ export default function Inbox() {
             try {
                 const response = await fetch(`/api/mail/${email}?page=${page}`)
                 const data = await response.json()
-
-                const newMails = [...mails, ...data.data.mails]
-                setMails(newMails)
-                setHasNext(data.data.limit < data.data.total)
+                setMails(data.data.mails)
+                setHasNext(data.data.total >= data.data.limit)
             } catch (error) {
                 console.error(error)
             }
@@ -42,17 +41,33 @@ export default function Inbox() {
     }, [email, page])
 
     return (
-        <div className="flex h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-            <main className="flex h-screen w-full max-w-3/4 flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-                <div className="flex h-full w-full flex-1 border rounded-lg">
-                    <div className="flex flex-col overflow-y-auto w-1/3 border-r">
-                        {mails.map((mail, index) => (
-                            <Mail key={index} mail={mail} />
-                        ))}
-                        <button onClick={loadMore}>Load More</button>
-                    </div>
+        <div className="overflow-x-auto pt-12">
+            <div className="flex justify-between mb-8">
+                <button className="btn btn-ghost" onClick={refresh}>Refresh</button>
+                <div className="flex items-center gap-2">
+                    <button disabled={page === 1} className="btn btn-ghost" onClick={handlePreviousPage}>{'<'}</button>
+                    <p>Page {page}</p>
+                    <button disabled={!hasNext} className="btn btn-ghost" onClick={handleNextPage}>{'>'}</button>
                 </div>
-            </main>
+            </div>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {mails.map((mail, index) => (
+                        <tr key={index}>
+                            <td>{mail.from}</td>
+                            <td>{mail.subject}</td>
+                            <td>{formatTimeString(mail.createdAt)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     )
 }

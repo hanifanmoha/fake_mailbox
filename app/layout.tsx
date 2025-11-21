@@ -27,8 +27,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Navbar />
+        <div className="px-48">
+          {children}
+        </div>
       </body>
     </html>
   );
+}
+
+function Navbar() {
+  return (
+    <div className="navbar bg-base-100 shadow-sm px-48">
+      <div className="flex-1">
+        <a className="btn btn-ghost text-xl">Fake Mailbox</a>
+      </div>
+    </div>
+  )
 }
